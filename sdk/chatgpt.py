@@ -1,5 +1,5 @@
 from openai import OpenAI
-from config import API_KEY, PROXY_URL
+from config import API_KEY, PROXY_URL, MODEL
 from sdk.persisted_data import alloc, fetch
 
 client = OpenAI(
@@ -9,7 +9,7 @@ client = OpenAI(
 
 def ask(msg: list) -> str:
     ret = client.chat.completions.create(
-      model="gpt-4",
+      model=MODEL,
       messages=msg
     )
     # print(ret)

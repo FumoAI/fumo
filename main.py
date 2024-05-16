@@ -13,7 +13,7 @@ from plugins.answer.answer import answer
 from plugins.guess_npc.guess_npc import guess_npc
 from plugins.tingpai.tingpai import tingpai
 from plugins.coin.coin import coin
-from plugins.repeat.repeat import repeat
+# from plugins.repeat.repeat import repeat
 from plugins.score.score import score
 from plugins.essence.essence import essence
 from plugins.nudge.nudge import nudge
@@ -26,6 +26,7 @@ from plugins.rua.rua import rua
 from plugins.playmaze.playmaze import playmaze
 from plugins.aidraw.aidraw import aidraw
 from plugins.setu.setu import setu
+from plugins.chinese_mahjong.chinese_mahjong import chinese_mahjong
 
 bot = App()
 
@@ -56,5 +57,6 @@ bot.register_plugin(playmaze)
 
 bot.register_plugin(aidraw)
 bot.register_plugin(setu)
+bot.register_plugin(chinese_mahjong)
 
 bot.run()
