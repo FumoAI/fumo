@@ -10,12 +10,12 @@ from sdk.persisted_data import fetch as persist_fetch
 from sdk.log import logger
 from random import random
 import time
-from config import QQ
+from config import QQ, PRIVILEDGED_GROUP, PRIVILEDGED_USER
 
 group_logger = logger("chatgpt", "Group")
 friend_logger = logger("chatgpt", "Friend")
 
-def dialog(key: str, message: str, logger) -> str:
+def dialog(key: str, message: str, logger, privileged: bool) -> str:
     if message == "结束对话":
         dump(key)
         return "对话结束"
@@ -47,7 +47,7 @@ def dialog(key: str, message: str, logger) -> str:
         if len(data["history"]) > 31:
             dump(key)
             return "上下文过长，请回复“结束对话”重新开始"
-        resp = ask(data["history"])
+        resp = ask(data["history"], privileged)
         data["history"].append({
             "role": "assistant",
             "content": resp
@@ -62,8 +62,9 @@ def dialog(key: str, message: str, logger) -> str:
 
 async def group_message_handler(session: str, group_id: int, sender_id: int, message):
     key = f"chatgpt_{group_id}_{sender_id}"
-    resp = dialog(key, message[2], group_logger)
-    group_logger["info"](f"{group_id}: {sender_id}: {message[2]}\n{resp}")
+    prv = group_id == PRIVILEDGED_GROUP
+    resp = dialog(key, message[2], group_logger, prv)
+    group_logger["info"](f"{group_id}: {sender_id}: [{prv}] {message[2]}\n{resp}")
     await send_group_message(session, group_id, text_message(resp))
     if random() >= 0.95:
         token = persist_fetch('token_usage').get('usage')
@@ -74,7 +75,8 @@ async def friend_message_handler(session: str, sender_id: int, message):
     if sender_id == QQ:
         return
     key = f"chatgpt_{sender_id}"
-    resp = dialog(key, message[0], friend_logger)
+    prv = sender_id == PRIVILEDGED_USER
+    resp = dialog(key, message[0], friend_logger, prv)
     friend_logger["info"](f"{sender_id}: {message[0]}\n{resp}")
     await send_friend_message(session, sender_id, text_message(resp))
     if random() >= 0.95:

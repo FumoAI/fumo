@@ -1,5 +1,5 @@
 from openai import OpenAI
-from config import API_KEY, PROXY_URL, MODEL
+from config import API_KEY, PROXY_URL, MODEL, PRIVILEDGED_MODEL
 from sdk.persisted_data import alloc, fetch
 
 client = OpenAI(
@@ -7,9 +7,9 @@ client = OpenAI(
     api_key=API_KEY
 )
 
-def ask(msg: list) -> str:
+def ask(msg: list, privileged: bool = False) -> str:
     ret = client.chat.completions.create(
-      model=MODEL,
+      model=PRIVILEDGED_MODEL if privileged else MODEL,
       messages=msg
     )
     # print(ret)

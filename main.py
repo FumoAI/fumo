@@ -27,6 +27,7 @@ from plugins.playmaze.playmaze import playmaze
 from plugins.aidraw.aidraw import aidraw
 from plugins.setu.setu import setu
 from plugins.chinese_mahjong.chinese_mahjong import chinese_mahjong
+from plugins.emoji.emoji import emoji
 
 bot = App()
 
@@ -58,5 +59,7 @@ bot.register_plugin(playmaze)
 bot.register_plugin(aidraw)
 bot.register_plugin(setu)
 bot.register_plugin(chinese_mahjong)
+
+bot.register_plugin(emoji)
 
 bot.run()
